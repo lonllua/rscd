@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "MainController.h"
+#import "MagicalRecord.h"
+#import "MagicalRecord+Setup.h"
 
 @interface AppDelegate ()
 
