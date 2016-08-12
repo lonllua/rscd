@@ -8,8 +8,10 @@
 
 #import "AppDelegate.h"
 #import "MainController.h"
+#import "WelcomeViewController.h"
 #import "MagicalRecord.h"
 #import "MagicalRecord+Setup.h"
+#import "MagicalRecord+Options.h"
 
 @interface AppDelegate ()
 
@@ -19,8 +21,35 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [self initMagicalRecord];
+    [self initWindow];
     return YES;
+}
+
+/**
+ * 把主界面放到导航控制器中
+ */
+- (void)initWindow
+{
+    UINavigationController *navController = [[UINavigationController alloc] init];
+    WelcomeViewController *welcomeController = [[WelcomeViewController alloc] init];
+    [navController setViewControllers:[NSArray arrayWithObject:welcomeController]];
+    
+    self.window.rootViewController = navController;
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+}
+
+
+- (void)initMagicalRecord
+{
+    //初始化数据库 下面的顺序可能需要调整
+    NSString *dbURL = [[NSBundle mainBundle] pathForResource:@"BMDB" ofType:@"sqlite"];
+    [MagicalRecord setupCoreDataStackWithStoreNamed:dbURL];
+    [MagicalRecord setupAutoMigratingCoreDataStack];
+    [MagicalRecord setShouldAutoCreateDefaultPersistentStoreCoordinator:YES];
+    [MagicalRecord setShouldDeleteStoreOnModelMismatch:YES];
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

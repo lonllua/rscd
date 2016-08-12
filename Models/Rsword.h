@@ -13,7 +13,7 @@
 @property (nonatomic, retain) NSString * word;
 @property (nonatomic, retain) NSString * cixin;
 @property (nonatomic, retain) NSString * bianxin;
-@property (nonatomic, retain) NSNumber * jinyici;
-@property (nonatomic, retain) NSNumber * shiyi;
+@property (nonatomic, retain) NSString * jinyici;
+@property (nonatomic, retain) NSString * shiyi;
 
 @end

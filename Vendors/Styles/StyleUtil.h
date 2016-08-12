@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UINavigationController+SGProgress.h"
 
 typedef enum {
     PositionTypeLeft,
@@ -75,7 +74,6 @@ typedef enum {
 
 + (void)setTableViewCellLineSelectedStyle:(UIView *)lineView, ...;
 
-+ (void)setTableViewStyle:(UITableView *)tableView;
 
 + (CALayer *)addSeparatorLine:(UIView *)view frame:(CGRect)frame color:(UIColor *)color;
 
@@ -96,24 +94,5 @@ typedef enum {
 
 + (void)setViewFrame:(UIView *)view height:(CGFloat)height top:(CGFloat)top;
 
-/**
- * 获取没有数据的单元格
- */
-+ (UITableViewCell *)getEmptyTableCell:(NSString *)message color:(UIColor *)color;
-
-+ (UITableViewCell *)getEmptyTableCell:(NSString *)message;
-
-/**
- *  显示默认的进度条
- */
-+(void)showLoadingBar:(UINavigationController *) navigationController;
-
-+(void)showLoadingBar:(UINavigationController *) navigationController title:(NSString *) title;
-
-/**
- *  结束进度条的显示
- *
- */
-+(void)hideLoadingBar:(UINavigationController *) navigationController;
 
 @end

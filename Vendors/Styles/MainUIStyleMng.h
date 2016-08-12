@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 winupon. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "NavigationItemWraper.h"
 
 @interface MainUIStyleMng : NSObject
@@ -27,13 +27,8 @@
 -(void) setTabBarStyle:(UITabBar *)tabBar;
 
 /**
- * 首页导航条样式设置（绿色）
- */
--(void) setNavigationBarStyle:(UINavigationBar *)navigationBar;
-
-/**
  * 其他页面导航条样式设置（灰色）
  */
--(void) setNavigationBarStyle2:(UINavigationBar *)navigationBar;
+-(void) setNavigationBarStyle:(UINavigationBar *)navigationBar;
 
 @end

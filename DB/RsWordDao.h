@@ -13,4 +13,6 @@
 
 +(Rsword *) queryRswordByWord:(NSString *)word;
 
++ (BOOL)addRsword:(Rsword *)rsword;
+
 @end

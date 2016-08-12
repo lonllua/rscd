@@ -6,8 +6,8 @@
 //  Copyright © 2016年 bim. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface MainController : NSObject
+@interface MainController : UIViewController
 
 @end

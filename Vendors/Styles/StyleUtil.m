@@ -10,7 +10,6 @@
 #import "StyleUtil.h"
 #import "AppColor.h"
 #import "AppMacro.h"
-#import "CompatibilityUtil.h"
 
 @implementation StyleUtil
 
@@ -192,12 +191,6 @@
 }
 
 
-+ (void)setTableViewStyle:(UITableView *)tableView
-{
-    tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [CompatibilityUtil setTableViewStyle:tableView];
-}
-
 + (CALayer *)addSeparatorLine:(UIView *)view frame:(CGRect)frame color:(UIColor *)color
 {
     CALayer *separator = [[CALayer alloc] init];
@@ -297,20 +290,6 @@
     return [StyleUtil getEmptyTableCell:message color:nil];
 }
 
-+(void)showLoadingBar:(UINavigationController *) navigationController
-{
-    [navigationController showSGProgressWithDuration:4 andTintColor:[UIColor greenColor]];
-}
-
-+(void)showLoadingBar:(UINavigationController *) navigationController title:(NSString *) title
-{
-    [navigationController showSGProgressWithDuration:4 andTintColor:navigationController.navigationBar.tintColor andTitle:title];
-}
-
-+(void)hideLoadingBar:(UINavigationController *) navigationController
-{
-    [navigationController finishSGProgress];
-}
 + (void)setViewOrigin:(UIView *)view x:(CGFloat)x y:(CGFloat)y
 {
     CGRect frame = view.frame;
