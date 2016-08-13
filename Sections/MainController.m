@@ -38,20 +38,8 @@
     [self.view addSubview:wordField];
     [wordField setPlaceholder:@"请输入单词，如：göra"];
     
-    Rsword *resultWord = [RsWordDao queryRswordByWord:@"hello"];
+    Rsword *resultWord = [RsWordDao queryRswordByWord:@"gor"];
     NSLog(@"结果1是：%@", resultWord.word);
-    
-    
-    Rsword *addOne = [[Rsword alloc] init];
-    addOne.word = @"hello";
-    addOne.cixin = @"v";
-    addOne.jinyici = @"hi";
-    addOne.bianxin = @"helo";
-    addOne.shiyi = @"你好";
-    [RsWordDao addRsword:addOne];
-    
-    Rsword *addOneQuery = [RsWordDao queryRswordByWord:@"hello"];
-    NSLog(@"结果2是：%@", addOneQuery.word);
 }
 
 /**

@@ -62,13 +62,29 @@ NSString * const kMagicalRecordPSCDidCompleteiCloudSetupNotification = @"kMagica
     }
 }
 
+-(void)setupDataBase:(NSURL *) dbUrl
+{
+    NSString *sourcePath=[[NSBundle mainBundle] pathForResource:@"BMDB2" ofType:@"sqlite"];
+    //单例对象文件管理器创建
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSError *error=nil;
+    //判断目录下文件是否存在,当不存在的时候就进行拷贝，否则返回instanc
+    if (![fm fileExistsAtPath:[dbUrl path]]) {
+        if ([fm copyItemAtPath:sourcePath toPath:[dbUrl path] error:&error]) {
+            NSLog(@"拷贝成功:%@", [dbUrl path]);
+        }else{
+            NSLog(@"error=%@",error);
+        }
+    }
+}
+
 - (NSPersistentStore *) MR_addSqliteStoreNamed:(id)storeFileName withOptions:(__autoreleasing NSDictionary *)options
 {
     NSURL *url = [storeFileName isKindOfClass:[NSURL class]] ? storeFileName : [NSPersistentStore MR_urlForStoreName:storeFileName];
     NSError *error = nil;
-    
+   
     [self MR_createPathToStoreFileIfNeccessary:url];
-    
+    [self setupDataBase:url];
     NSPersistentStore *store = [self addPersistentStoreWithType:NSSQLiteStoreType
                                                   configuration:nil
                                                             URL:url

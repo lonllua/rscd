@@ -44,13 +44,19 @@
 - (void)initMagicalRecord
 {
     //初始化数据库 下面的顺序可能需要调整
-    NSString *dbURL = [[NSBundle mainBundle] pathForResource:@"BMDB" ofType:@"sqlite"];
-    [MagicalRecord setupCoreDataStackWithStoreNamed:dbURL];
+//    NSString *dbURL = [[NSBundle mainBundle] pathForResource:@"BMDB" ofType:@"sqlite"];
+//    [MagicalRecord setupCoreDataStackWithStoreNamed:dbURL];
+    NSString *docPath=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *targetPath=[docPath stringByAppendingPathComponent:@"BMDB2.sqlite"];
+    NSLog(@"targetPath=%@",targetPath);
+    
+    [MagicalRecord setupCoreDataStackWithStoreNamed:targetPath];
     [MagicalRecord setupAutoMigratingCoreDataStack];
     [MagicalRecord setShouldAutoCreateDefaultPersistentStoreCoordinator:YES];
     [MagicalRecord setShouldDeleteStoreOnModelMismatch:YES];
     
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
