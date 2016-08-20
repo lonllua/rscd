@@ -3,7 +3,7 @@
 //  etoh22  ce
 //
 //  Created by bim on 15/1/1.
-//  Copyright (c) 2015年 winupon. All rights reserved.
+//  Copyright (c) 2015年 biming. All rights reserved.
 //
 
 #import "ButtonStyleUtil.h"

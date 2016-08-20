@@ -3,7 +3,7 @@
 //  etoh22
 //
 //  Created by bim on 15/1/6.
-//  Copyright (c) 2015年 winupon. All rights reserved.
+//  Copyright (c) 2015年 biming. All rights reserved.
 //
 
 #import "LoadingView.h"

@@ -5,7 +5,7 @@
 //  app相关的宏定义
 //
 //  Created by bim on 14/12/22.
-//  Copyright (c) 2014年 winupon. All rights reserved.
+//  Copyright (c) 2014年 biming. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

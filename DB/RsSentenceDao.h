@@ -7,9 +7,12 @@
 //
 
 #import "BaseDao.h"
+#import "RsWordSentence.h"
 
 @interface RsSentenceDao : BaseDao
 
 +(NSMutableArray *) querySentenceListByWord:(NSString *) word;
+
++ (BOOL)addRsWordSentence:(RsWordSentence *)rws;
 
 @end

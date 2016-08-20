@@ -64,7 +64,7 @@ NSString * const kMagicalRecordPSCDidCompleteiCloudSetupNotification = @"kMagica
 
 -(void)setupDataBase:(NSURL *) dbUrl
 {
-    NSString *sourcePath=[[NSBundle mainBundle] pathForResource:@"BMDB2" ofType:@"sqlite"];
+    NSString *sourcePath=[[NSBundle mainBundle] pathForResource:@"BMDB" ofType:@"sqlite"];
     //单例对象文件管理器创建
     NSFileManager *fm=[NSFileManager defaultManager];
     NSError *error=nil;

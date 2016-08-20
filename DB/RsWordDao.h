@@ -11,6 +11,8 @@
 
 @interface RsWordDao : BaseDao
 
++(BOOL) removeAllData;
+
 +(Rsword *) queryRswordByWord:(NSString *)word;
 
 + (BOOL)addRsword:(Rsword *)rsword;

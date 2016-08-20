@@ -3,7 +3,7 @@
 //  etoh22
 //
 //  Created by bim on 14/12/29.
-//  Copyright (c) 2014年 winupon. All rights reserved.
+//  Copyright (c) 2014年 biming. All rights reserved.
 //
 
 #import "MainUIStyleMng.h"
@@ -52,7 +52,7 @@
     navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:19], NSFontAttributeName,
                                          [[AppColor sharedAppColor] colorWithString:@"#333333"], NSForegroundColorAttributeName, nil];
     [navigationBar setBackgroundImage:headBgImg forBarMetrics:UIBarMetricsDefault];
-    
+
     // 隐藏返回图标的文字
     [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-300, 0) forBarMetrics:UIBarMetricsDefault];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];

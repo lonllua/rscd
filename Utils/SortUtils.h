@@ -3,7 +3,7 @@
 //  etoh22
 //
 //  Created by bim on 15/11/16.
-//  Copyright © 2015年 winupon. All rights reserved.
+//  Copyright © 2015年 biming. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

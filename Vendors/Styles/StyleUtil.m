@@ -3,26 +3,29 @@
 //  etoh22
 //
 //  Created by bim on 14/12/30.
-//  Copyright (c) 2014年 winupon. All rights reserved.
+//  Copyright (c) 2014年 biming. All rights reserved.
 //
 
 #import "ButtonStyleUtil.h"
 #import "StyleUtil.h"
 #import "AppColor.h"
 #import "AppMacro.h"
+#import "Validators.h"
 
 @implementation StyleUtil
 
 + (CGSize)getTextSize:(NSString *)content font:(UIFont *)font maxSize:(CGSize)maxSize
 {
-    if (!font) {
-        font = [UIFont systemFontOfSize:17];
+    if ([Validators isEmpty:content]) {
+        return CGSizeZero;
     }
-    if (CGSizeEqualToSize(maxSize, CGSizeZero) == YES ) {
-        maxSize = CGSizeMake(SCREEN_WIDTH,CONTENT_HEIGHT);
-    }
-    CGSize textSize = [content sizeWithFont:font constrainedToSize:maxSize lineBreakMode:NSLineBreakByCharWrapping];
-    return textSize;
+    
+    NSStringDrawingOptions options =  NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:6.5];
+    NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
+    CGRect rect = [content boundingRectWithSize:maxSize options:options attributes:attributes context:nil];
+    return rect.size;
 }
 
 + (CGSize)getTextSize:(NSString *)content font:(UIFont *)font

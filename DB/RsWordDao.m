@@ -13,6 +13,15 @@
 
 @implementation RsWordDao
 
++(BOOL) removeAllData
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"word != '123'"];
+    [Rs_word MR_deleteAllMatchingPredicate:predicate];
+    [BaseDao commit];
+    return true;
+}
+
+
 +(Rsword *) queryRswordByWord:(NSString *)word
 {
     if([Validators isEmpty:word]){
@@ -20,8 +29,8 @@
     }
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"word = %@",word];
-    NSArray *allWords = [Rs_word MR_findAll];
-    NSLog(@"数据数量：%ld",[allWords count]);
+    NSArray *all = [Rs_word MR_findAll];
+    NSLog(@"数据条数：%ld", [all count]);
     Rs_word *rs_word = [Rs_word MR_findFirstWithPredicate:predicate];
     if (rs_word) {
         return [RsWordDao convertBackFromTableMapping:rs_word];
