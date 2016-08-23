@@ -27,6 +27,7 @@
         RsWordSentence *rws = [RsSentenceDao convertBackFromTableMapping:rwsList[i]];
         [resultArray addObject:rws];
     }
+
     return resultArray;
 }
 

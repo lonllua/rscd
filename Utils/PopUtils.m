@@ -43,4 +43,25 @@
     [buttonAnimation setCompletionBlock:callback];
 }
 
+-(void)addPopFadeOut:(UIView *) view callback:(void(^)(POPAnimation *animation, BOOL finished)) callback
+{
+    POPBasicAnimation *anim = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    anim.fromValue = @(1.0);
+    anim.toValue = @(0.0);
+    [view pop_addAnimation:anim forKey:@"fadeOut"];
+    [anim setCompletionBlock:callback];
+}
+
+-(void)addPopFadeIn:(UIView *) view callback:(void(^)(POPAnimation *animation, BOOL finished)) callback
+{
+    POPBasicAnimation *anim = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    anim.fromValue = @(0.0);
+    anim.toValue = @(1.0);
+    [view pop_addAnimation:anim forKey:@"fadeIn"];
+    [anim setCompletionBlock:callback];
+}
+
+
 @end

@@ -30,4 +30,10 @@
  */
 -(void)addPopAnimation2:(UIView *) view callback:(void(^)(POPAnimation *animation, BOOL finished)) callback;
 
+
+/**淡出*/
+-(void)addPopFadeOut:(UIView *) view callback:(void(^)(POPAnimation *animation, BOOL finished)) callback;
+/**淡入*/
+-(void)addPopFadeIn:(UIView *) view callback:(void(^)(POPAnimation *animation, BOOL finished)) callback;
+
 @end

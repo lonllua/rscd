@@ -16,6 +16,7 @@
 #import "RsWordDao.h"
 #import "RsSentenceDao.h"
 #import "StyleUtil.h"
+#import "PopUtils.h"
 
 @interface MainController ()
 {
@@ -24,12 +25,14 @@
     NavigationItemWraper *navigationItemWraper;//标题控件打包
     NSString *appName;
     UIScrollView *root;
-    
     UITextField *wordField; // 搜索栏
     
+    UIView *noResultRoot;
+    UIImageView *noResultImg;
+    UILabel *noResultLabel;
     
+    // 词性
     UIView *wordView;
-    
     UILabel *cxLabel;
     UILabel *cixinL;
     UILabel *bianxinL;
@@ -37,7 +40,9 @@
     UILabel *shiyiL;
     UILabel *syLabel;
     
+    // 例句
     UILabel *llLabel;
+    NSMutableArray *lijuLabelList;
     
     float fontSize;
 }
@@ -51,15 +56,14 @@
     [super viewDidLoad];
     [self initNavigationBar];
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.title = @"瑞士词典";
+    [StyleUtil drawLine:self.view frame:CGRectMake(0, 0, SCREEN_WIDTH, 0.5)];
     
     appColor = [AppColor sharedAppColor];
     fontSize = 16;
     
-    root = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, CONTENT_HEIGHT)];
+    root = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, CONTENT_HEIGHT-40)];
     [self.view addSubview:root];
     [root setBackgroundColor:[UIColor whiteColor]];
-    [StyleUtil drawLine:root frame:CGRectMake(0, 0, SCREEN_WIDTH, 0.5)];
     
     //////////////////////////////////////// 输入框 ////////////////////////////////////////////////////////////
     wordField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH - 20, 40)];
@@ -69,12 +73,12 @@
     wordField.keyboardType = UIKeyboardTypeDefault;
     wordField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     wordField.autocorrectionType = UITextAutocorrectionTypeNo;
-    [root addSubview:wordField];
+    [self.view addSubview:wordField];
     [wordField setPlaceholder:@"请输入单词，如：göra"];
     
-    [StyleUtil drawLine:root frame:CGRectMake(0, 50, SCREEN_WIDTH, 10) color:[appColor colorWithString:@"#EDEDED"]];
+    [StyleUtil drawLine:root frame:CGRectMake(0, 10, SCREEN_WIDTH, 10) color:[appColor colorWithString:@"#EDEDED"]];
     /// 单词属性VIEW
-    wordView = [[UIView alloc] initWithFrame:CGRectMake(0, 55, SCREEN_WIDTH, 0)];
+    wordView = [[UIView alloc] initWithFrame:CGRectMake(0, 15, SCREEN_WIDTH, 0)];
     [root addSubview:wordView];
     //////////////////////////////////////// 词性 ////////////////////////////////////////////////////////////
     cxLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 48, fontSize)];
@@ -121,7 +125,27 @@
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
     [root addGestureRecognizer:tapRecognizer];
     
-    [self seachWord];
+    [self seachWord:NO];
+    
+    //////////////////////////////////////// 无结果 ////////////////////////////////////////////////////////////
+    noResultRoot = [[UIView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, CONTENT_HEIGHT-40)];
+    [noResultRoot setHidden:YES];
+    [self.view addSubview:noResultRoot];
+    [noResultRoot setBackgroundColor:[UIColor whiteColor]];
+    [StyleUtil drawLine:noResultRoot frame:CGRectMake(0, 0, SCREEN_WIDTH, 10) color:[appColor colorWithString:@"#EDEDED"]];
+    
+    noResultImg = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - 110)/2, 140, 110, 110)];
+    [noResultImg setImage:[UIImage imageNamed:@"img_empty"]];
+    [noResultRoot addSubview:noResultImg];
+    
+    noResultLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 265, SCREEN_WIDTH, 16)];
+    noResultLabel.text = @"抱歉！没有找到单词";
+    noResultLabel.textAlignment = NSTextAlignmentCenter;
+    noResultLabel.font = [UIFont systemFontOfSize:16];
+    noResultLabel.textColor = [appColor colorWithString:@"#333333"];
+    [noResultRoot addSubview:noResultLabel];
+    //  收起键盘
+    [noResultRoot addGestureRecognizer:tapRecognizer];
 }
 
 -(void) setLabel:(UILabel *)label
@@ -156,11 +180,18 @@
 {
     NSLog(@"语言：%@", [[self textInputMode] primaryLanguage]);
     [wordField resignFirstResponder];
-    [self seachWord];
+    [self seachWordWithAnimation];
     return YES;
 }
 
--(void) seachWord
+-(void)seachWordWithAnimation
+{
+    [[PopUtils sharePopUtils] addPopFadeOut:root callback:^(POPAnimation *animation, BOOL finished) {
+        [self seachWord:YES];
+    }];
+}
+
+-(void) seachWord:(BOOL) withAnimation
 {
     NSString *seachWord = wordField.text;
     if (!seachWord || [@"" isEqualToString:seachWord]) {
@@ -169,7 +200,22 @@
     
     Rsword *rw = [RsWordDao queryRswordByWord:seachWord];
     if (!rw) { // 没有此单词
+        if(withAnimation){
+            [root setHidden:YES];
+            [noResultRoot setHidden:NO];
+            [noResultLabel setText:[NSString stringWithFormat:@"抱歉！没有找到单词[%@]", seachWord]];
+        }
         return;
+    }else{
+        [root setHidden:NO];
+        [noResultRoot setHidden:YES];
+    }
+    
+    if (lijuLabelList && [lijuLabelList count] > 0) { // 移除例句
+        [lijuLabelList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UILabel *label = obj;
+            [label removeFromSuperview];
+        }];
     }
     
     CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 68, 100);
@@ -195,20 +241,33 @@
     [StyleUtil drawLine:wordView frame:CGRectMake(10, wordViewH-0.5, SCREEN_WIDTH-10, 0.5)];
     
     // 例句
-    [StyleUtil setViewTop:llLabel top: 65 + wordViewH];
+    [StyleUtil setViewTop:llLabel top: 25 + wordViewH];
     NSArray *lijuList = [RsSentenceDao querySentenceListByWord:seachWord];
-    __block float lijuTop = 65 + wordViewH + fontSize + 10;
+    __block float lijuTop = 25 + wordViewH + fontSize + 10;
+    lijuLabelList = [NSMutableArray array];
     [lijuList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         RsWordSentence *rws = obj;
         lijuTop = [self addLijulabel:lijuTop text:rws.sentence fanyi:rws.chinese index:idx];
+        if (idx == [lijuList count]-1) { //  结束
+            [[PopUtils sharePopUtils] addPopFadeIn:root callback:^(POPAnimation *animation, BOOL finished) {
+                if (lijuTop > root.frame.size.height) {
+                    [root setContentSize:CGSizeMake(SCREEN_WIDTH, lijuTop)];
+                }
+            }];
+        }
     }];
+    
+    if(!lijuList || [lijuList count] == 0){
+        [[PopUtils sharePopUtils] addPopFadeIn:root callback:^(POPAnimation *animation, BOOL finished) {
+        }];
+    }
+        
 }
 
 -(float) addLijulabel:(float) top text:(NSString *)text fanyi:(NSString *)fanyi index:(NSUInteger)index
 {
     CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 20, 100);
     UIFont *font = [UIFont systemFontOfSize:fontSize];
-    
     // 例句原文. 如: 1. Hon skulle ha fest på kvällen och hade massor att göra.
     UILabel *lijuL = [[UILabel alloc] initWithFrame:CGRectMake(10, top, SCREEN_WIDTH - 20, 0)];
     [lijuL setFont:[UIFont systemFontOfSize:fontSize]];
@@ -239,6 +298,8 @@
     [StyleUtil setViewHeight:fanyiL height:fanyiSize.height];
     [root addSubview:fanyiL];
     
+    [lijuLabelList addObject:lijuL];
+    [lijuLabelList addObject:fanyiL];
     return top + lijuSize.height + 10 + fanyiSize.height + 10;
 }
 
